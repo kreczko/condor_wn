@@ -1,0 +1,31 @@
+sudo: required
+
+language: python
+
+python:
+  - 2.6
+  # - 2.7
+  # - 3.4
+  # - 3.6
+
+env:
+  matrix:
+  - CONDOR_VERSION=8.6.12 CONDOR_BRANCH=stable
+  # - CONDOR_VERSION=8.7.9 CONDOR_BRANCH=development
+
+before_install:
+  - sudo echo "deb [ arch=amd64 ] http://research.cs.wisc.edu/htcondor/ubuntu/${CONDOR_BRANCH}/ trusty contrib" >> /etc/apt/sources.list
+  - wget -qO - http://research.cs.wisc.edu/htcondor/ubuntu/HTCondor-Release.gpg.key | sudo apt-key add -
+  - sudo apt-get update
+  - sudo apt-cache search condor
+  - sudo apt-get install condor=${CONDOR_VERSION}*
+  - pip install htcondor # only available for >=8.7.6
+  - sudo service condor start
+
+install:
+  - pip install pyyaml prettytable
+  - sudo cp condor_wn.yaml /usr/local/etc/.
+  - sudo cp condor_wn /usr/local/bin/.
+
+script:
+  - condor_wn --summary
