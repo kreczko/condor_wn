@@ -4,14 +4,14 @@ language: python
 
 python:
   - 2.6
-  # - 2.7
+  - 2.7
   # - 3.4
   # - 3.6
 
 env:
   matrix:
   - CONDOR_VERSION=8.6.12 CONDOR_BRANCH=stable
-  # - CONDOR_VERSION=8.7.9 CONDOR_BRANCH=development
+  - CONDOR_VERSION=8.7.9 CONDOR_BRANCH=development
 
 before_install:
   - sudo echo "deb [ arch=amd64 ] http://research.cs.wisc.edu/htcondor/ubuntu/${CONDOR_BRANCH}/ trusty contrib" >> /etc/apt/sources.list
@@ -23,7 +23,7 @@ before_install:
   - sudo service condor start
 
 install:
-  - pip install pyyaml prettytable
+  - pip install pyyaml prettytable flake8
   - sudo cp condor_wn.yaml /usr/local/etc/.
   - sudo cp condor_wn /usr/local/bin/.
 
